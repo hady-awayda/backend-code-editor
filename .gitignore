@@ -30,4 +30,4 @@ auth.json
 /.fleet
 /.idea
 /.vscode
-*.sh
+# *.sh
