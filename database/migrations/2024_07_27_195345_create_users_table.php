@@ -11,8 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement('CREATE TYPE users_role_enum AS ENUM (\'admin\', \'user\')');
-        
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string("name");
@@ -29,6 +27,5 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('users');
-        DB::statement('DROP TYPE users_role_enum');
     }
 };
