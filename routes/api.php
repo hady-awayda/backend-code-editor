@@ -36,4 +36,5 @@ Route::group([
     Route::get('/{id}', 'readSourceCode');
     Route::get('/', 'getAllSourceCode');
     Route::put('/{id}', 'updateSourceCode');
+    Route::delete('/{id}', 'deleteSourceCode');
 });

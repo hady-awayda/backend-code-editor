@@ -77,4 +77,16 @@ class SourceCodeController extends Controller
             return response()->json(['message' => 'An error occurred', 'error' => $e->getMessage()], 500);
         }
     }
+
+    public function deleteSourceCode($id)
+    {
+        $code = SourceCode::find($id);
+        $code->delete();
+        if ($code) {
+            $code->delete();
+            return response()->json(null, 204);
+        } else {
+            return response()->json(['error' => 'Code not found'], 404);
+        }
+    }
 }
