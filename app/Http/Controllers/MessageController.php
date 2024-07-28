@@ -6,26 +6,23 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Conversation;
 use App\Models\Message;
+use App\Http\Services\MessageService;
 
 class MessageController extends Controller
 {
     public function getMessagesBetweenUsers($userId1, $userId2)
     {
-        $conversation = Conversation::where(function ($query) use ($userId1, $userId2) {
-            $query->where('user_id_1', $userId1)
-                  ->where('user_id_2', $userId2);
-        })->orWhere(function ($query) use ($userId1, $userId2) {
-            $query->where('user_id_1', $userId2)
-                  ->where('user_id_2', $userId1);
-        })->first();
+        $messages = MessageService::getConversation($userId1, $userId2);
 
-        if (!$conversation) {
-            return response()->json(['message' => 'No conversation found between these users.'], 404);
+        if ($messages === "Conversation not found") {
+            return response()->json([
+                'message' => $messages
+            ], 404);
         }
 
-        $messages = $conversation->messages()->with('sender')->get();
-
-        return response()->json($messages, 200);
+        return response()->json([
+            'data' => $messages
+        ], 200);
     }
 
     public function addMessageToConversation(Request $request)
@@ -46,11 +43,13 @@ class MessageController extends Controller
         ]);
 
         $message = new Message();
+
         $message->conversation_id = $conversation->id;
         $message->sender_id = $senderId;
         $message->message = $messageText;
+        
         $message->save();
 
-        return response()->json(['message' => 'Message sent successfully', 'data' => $message], 201);
+        return response()->json(['message' => 'Message sent successfully'], 201);
     }
 }

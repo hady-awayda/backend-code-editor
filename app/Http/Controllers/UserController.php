@@ -12,6 +12,12 @@ class UserController extends Controller
 {
     public function getAllUsers() {
         $users = User::all();
+
+        if (!$users) {
+            return response()->json([
+                'message' => 'No users found'
+            ], 404);
+        }
         
         return response()->json([
             'data' => $users
@@ -20,6 +26,12 @@ class UserController extends Controller
     
     public function getUserById($user_id) {
         $user = User::find($user_id);
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not found'
+            ], 404);
+        } 
 
         return response()->json([
             'data' => $user
@@ -33,11 +45,11 @@ class UserController extends Controller
             return response()->json([
                 'message' => 'Created Successfully'
             ], 201);
-        } else {
-            return response()->json([
-                "errors" => $response
-            ], 422);
         }
+        
+        return response()->json([
+            "errors" => $response
+        ], 422);
     }
 
     public function updateUser(Request $request, $user_id) {
@@ -47,11 +59,11 @@ class UserController extends Controller
             return response()->json([
                 'message' => 'Updated Successfully'
             ], 204);
-        } else {
-            return response()->json([
-                "errors" => $response
-            ], 422);
         }
+        
+        return response()->json([
+            "errors" => $response
+        ], 422);
     }
 
     public function deleteUser(Request $request, $id)
@@ -62,10 +74,10 @@ class UserController extends Controller
             return response()->json([
                 "message" => 'Deleted Successfully'
             ], 204);
-        } else {
-            return response()->json([
-                "message" => $response
-            ], 404);
         }
+        
+        return response()->json([
+            "message" => $response
+        ], 404);
     }
 }
