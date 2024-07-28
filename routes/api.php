@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ConversationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,4 +38,11 @@ Route::group([
     Route::get('/', 'getAllSourceCode');
     Route::put('/{id}', 'updateSourceCode');
     Route::delete('/{id}', 'deleteSourceCode');
+});
+
+Route::group([
+    "prefix" => "conversations",
+    "controller" => ConversationController::class
+], function () {
+    Route::get("/{user_id_1}/{user_id_2}", "getConversationByUsers");
 });

@@ -54,9 +54,9 @@ class UserController extends Controller
         }
     }
 
-    public function deleteUser($id)
+    public function deleteUser(Request $request, $id)
     {
-        $response = UserService::deleteUser($id);
+        $response = UserService::deleteUser($request, $id);
 
         if ($response === "success") {
             return response()->json([
