@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,4 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::
+Route::group([
+    "prefix" => "users",
+    "controller" => UserController::class
+], function () {
+    Route::get("/", "getAllUsers");
+    Route::get("/{id}", "getUserById");
+    Route::post("/", "createUser");
+    Route::put("/{id}", "updateUser");
+    Route::delete("/{id}", "deleteUser");
+});

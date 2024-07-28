@@ -3,48 +3,69 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Services\UserService;
 
 class UserController extends Controller
 {
     public function getAllUsers() {
         $users = User::all();
+        
+        return response()->json([
+            'data' => $users
+        ], 200);
     }
     
-    // public function getAllUsers()
-    // {
-    //     $users = User::all();
-    //     return $users;
-    // }
+    public function getUserById($user_id) {
+        $user = User::find($user_id);
 
-    // public function getUserById($id)
-    // {
-    //     $user = User::find($id);
-    //     return $user;
-    // }
+        return response()->json([
+            'data' => $user
+        ], 200);
+    }
 
-    // public function createUser(Request $request)
-    // {
-    //     $user = new User();
-    //     $user->name = $request->name;
-    //     $user->email = $request->email;
-    //     $user->password = Hash::make($request->password);
-    //     $user->save();
-    //     return $user;
-    // }
+    public function createUser(Request $request) {
+        $response = UserService::createUser($request);
 
-    // public function updateUser(Request $request, $id)
-    // {
-    //     $user = User::find($id);
-    //     $user->name = $request->name;
-    //     $user->email = $request->email;
-    //     $user->save();
-    //     return $user;
-    // }
+        if ($response == "success") {
+            return response()->json([
+                'message' => 'Created Successfully'
+            ], 201);
+        } else {
+            return response()->json([
+                "errors" => $response
+            ], 422);
+        }
+    }
 
-    // public function deleteUser($id)
-    // {
-    //     $user = User::find($id);
-    //     $user->delete();
-    //     return $user;
-    // }
+    public function updateUser(Request $request, $user_id) {
+        $response = UserService::updateUser($request, $user_id);
+        
+        if ($response == "success") {
+            return response()->json([
+                'message' => 'Updated Successfully'
+            ], 200);
+        } else {
+            return response()->json([
+                "errors" => $response
+            ], 422);
+        }
+    }
+
+    public function deleteUser($id)
+    {
+        $response = UserService::deleteUser($id);
+
+        if ($response === "success") {
+            return response()->json([
+                "message" => 'Deleted Successfully'
+            ]);
+        } else {
+            return response()->json([
+                "message" => $response
+            ], 404);
+        }
+    }
 }
