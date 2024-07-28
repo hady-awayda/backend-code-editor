@@ -46,7 +46,7 @@ class UserController extends Controller
         if ($response == "success") {
             return response()->json([
                 'message' => 'Updated Successfully'
-            ], 200);
+            ], 204);
         } else {
             return response()->json([
                 "errors" => $response
@@ -61,7 +61,7 @@ class UserController extends Controller
         if ($response === "success") {
             return response()->json([
                 "message" => 'Deleted Successfully'
-            ]);
+            ], 204);
         } else {
             return response()->json([
                 "message" => $response

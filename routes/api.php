@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ConversationController;
+use App\Http\Controllers\SourceCodeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,13 +30,11 @@ Route::group([
 
 Route::group([
     // "middleware" => "authenticate",
-    "prefix" => "source_code",
-    "controller" => CodeController::class
+    "prefix" => "source_codes",
+    "controller" => SourceCodeController::class
 ], function () {
     Route::get('/{user_id}', 'getSourceCodesByUserId');
     Route::post('/', 'createSourceCode');
-    Route::get('/{id}', 'readSourceCode');
-    Route::get('/', 'getAllSourceCode');
     Route::put('/{id}', 'updateSourceCode');
     Route::delete('/{id}', 'deleteSourceCode');
 });

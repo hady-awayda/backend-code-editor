@@ -1,7 +1,7 @@
 # API Documentation
 
 Get:
-/api/source_codes?user_id - Retrieves all source codes by user_id
+/api/source_codes/user_id - Retrieves all source codes by user_id
 
 Post:
 /api/source_codes - Creates source code for user_id
