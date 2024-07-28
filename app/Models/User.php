@@ -13,9 +13,15 @@ class User extends Model
     
     public function conversations()
     {
-        return $this->hasMany(Conversation::class);
+        return $this->hasMany(Conversation::class, 'user_id_1')->orWhere('user_id_2', $this->id);
+
     }
 
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+    
     public function sourceCodes()
     {
         return $this->hasMany(SourceCode::class);

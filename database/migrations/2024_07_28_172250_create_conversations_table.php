@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id_1');
             $table->unsignedBigInteger('user_id_2');
-            $table->text('message');
             $table->timestamps();
-            
+
             $table->foreign('user_id_1')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('user_id_2')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
         });
@@ -32,6 +31,7 @@ return new class extends Migration
             $table->dropForeign(['user_id_1']);
             $table->dropForeign(['user_id_2']);
         });
+
         Schema::dropIfExists('conversations');
     }
 };
