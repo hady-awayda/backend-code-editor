@@ -41,4 +41,12 @@ class SourceCodeController extends Controller
             "code" => $code
         ], 200);
     }
+
+    public function getAllSourceCode()
+    {
+        $code = SourceCode::all();
+        return response()->json([
+            "code" => $code
+        ], 200);
+    }
 }
