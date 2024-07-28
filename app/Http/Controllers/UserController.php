@@ -11,6 +11,7 @@ class UserController extends Controller
 {
     public function getAllUsers() {
         $users = User::all();
+
         return response()->json([
             'data' => $users
         ], 200);
@@ -18,6 +19,7 @@ class UserController extends Controller
     
     public function getUserById($user_id) {
         $user = User::find($user_id);
+
         return response()->json([
             'data' => $user
         ], 200);
@@ -74,7 +76,9 @@ class UserController extends Controller
     public function deleteUser($id)
     {
         $user = User::find($id);
+
         $user->delete();
+        
         return response()->json([
             "message" => 'Deleted Successfully'
         ]);
