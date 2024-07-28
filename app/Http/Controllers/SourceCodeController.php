@@ -49,4 +49,32 @@ class SourceCodeController extends Controller
             "code" => $code
         ], 200);
     }
+
+    public function updateSourceCode(Request $req, $id)
+    {
+        try {
+            $code = SourceCode::find($id);
+            if (!$code) {
+                return response()->json(['message' => 'Code not found'], 404);
+            }
+
+            $validated_data = $req->validate([
+                "title" => "required|string|max:255",
+                "code" => "required|string",
+                "user_id" => "required|exists:users,id|numeric",
+            ]);
+
+            $code->update($validated_data);
+
+            return response()->json(['message' => 'updated successfully'], 204);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation Error:', $e->errors());
+
+            return response()->json(['message' => 'Validation Error', 'errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            Log::error($e);
+
+            return response()->json(['message' => 'An error occurred', 'error' => $e->getMessage()], 500);
+        }
+    }
 }

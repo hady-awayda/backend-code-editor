@@ -35,4 +35,5 @@ Route::group([
     Route::post('/', 'createSourceCode');
     Route::get('/{id}', 'readSourceCode');
     Route::get('/', 'getAllSourceCode');
+    Route::put('/{id}', 'updateSourceCode');
 });
