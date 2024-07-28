@@ -31,5 +31,6 @@ Route::group([
     "prefix" => "conversations",
     "controller" => ConversationController::class
 ], function () {
-    Route::get("/{user_id_1}/{user_id_2}", "getConversationByUsers");
+    Route::get("/{user_id_1}/{user_id_2}", "getMessagesBetweenUsers");
+    Route::post("/", "addMessageToConversation");
 });
