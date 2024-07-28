@@ -9,7 +9,7 @@ class Conversation extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["message", "user_id_1", "user_id_2"];
+    protected $fillable = ["user_id_1", "user_id_2"];
     
     public function user1()
     {
@@ -19,5 +19,10 @@ class Conversation extends Model
     public function user2()
     {
         return $this->belongsTo(User::class, 'user_id_2');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
     }
 }
