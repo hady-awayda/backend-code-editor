@@ -27,29 +27,16 @@ class MessageController extends Controller
 
     public function addMessageToConversation(Request $request)
     {
-        $request->validate([
-            'sender_id' => 'required|exists:users,id',
-            'receiver_id' => 'required|exists:users,id|different:sender_id',
-            'message' => 'required|string'
-        ]);
+        $response = MessageService::addMessage($request);
 
-        $senderId = $request->input('sender_id');
-        $receiverId = $request->input('receiver_id');
-        $messageText = $request->input('message');
-
-        $conversation = Conversation::firstOrCreate([
-            'user_id_1' => min($senderId, $receiverId),
-            'user_id_2' => max($senderId, $receiverId),
-        ]);
-
-        $message = new Message();
-
-        $message->conversation_id = $conversation->id;
-        $message->sender_id = $senderId;
-        $message->message = $messageText;
+        if ($response === "success") {
+            return response()->json([
+                'message' => 'Message sent successfully'
+            ], 201);
+        }
         
-        $message->save();
-
-        return response()->json(['message' => 'Message sent successfully'], 201);
+        return response()->json([
+            "errors" => $response
+        ], 422);
     }
 }

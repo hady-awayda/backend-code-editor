@@ -39,13 +39,21 @@ class MessageService
 		if ($validator->fails()) {
 			return $validator->errors();
 		}
-		
-		$message = new Message();
 
 		$validated_data = $validator->validated();
+		
+		$senderId = $validated_data['sender_id'];
+        $receiverId = $validated_data['receiver_id'];
 
-		$message->fill($validated_data);
-        
+        $conversation = Conversation::firstOrCreate([
+            'user_id_1' => min($senderId, $receiverId),
+            'user_id_2' => max($senderId, $receiverId),
+        ]);
+
+		$message = new Message();
+        $message->conversation_id = $conversation->id;
+        $message->sender_id = $senderId;
+        $message->message = $validated_data['message'];
         $message->save();
 
 		return "success"; 
