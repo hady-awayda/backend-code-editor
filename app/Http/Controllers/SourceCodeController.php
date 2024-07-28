@@ -16,4 +16,21 @@ class SourceCodeController extends Controller
             "data" => $sourceCodes
         ], 200);
     }
+
+
+    public function createSourceCode(Request $req)
+    {
+        $validated_data = $req->validate([
+            "user_id" => "required|exists:users,id|numeric",
+            "title" => "required|string|max:255",
+            "code" => "required|string|min:0"
+        ]);
+        $code = new SourceCode;
+        $code->fill($validated_data);
+        $code->save();
+        return response()->json([
+            "code" => $code,
+            "message" => 'created successfully'
+        ], 201);
+    }
 }

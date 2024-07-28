@@ -25,3 +25,12 @@ Route::group([
     Route::put("/{id}", "updateUser");
     Route::delete("/{id}", "deleteUser");
 });
+
+Route::group([
+    // "middleware" => "authenticate",
+    "prefix" => "source_code",
+    "controller" => CodeController::class
+], function () {
+    Route::get('/{user_id}', 'getSourceCodesByUserId');
+    Route::post('/', 'createSourceCode');
+});
