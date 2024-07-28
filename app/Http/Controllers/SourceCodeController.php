@@ -33,4 +33,12 @@ class SourceCodeController extends Controller
             "message" => 'created successfully'
         ], 201);
     }
+
+    public function readSourceCode($id)
+    {
+        $code = SourceCode::find($id);
+        return response()->json([
+            "code" => $code
+        ], 200);
+    }
 }

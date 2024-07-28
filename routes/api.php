@@ -33,4 +33,5 @@ Route::group([
 ], function () {
     Route::get('/{user_id}', 'getSourceCodesByUserId');
     Route::post('/', 'createSourceCode');
+    Route::get('/{id}', 'readSourceCode');
 });
