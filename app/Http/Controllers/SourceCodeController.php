@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\SourceCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-
 class SourceCodeController extends Controller
 {
     public function getSourceCodesByUserId($userId) {
-        $this->authorize('view', SourceCode::class);
+        this->authorize('view', SourceCode::class);
 
         $sourceCodes = SourceCode::where('user_id', $userId)->get();
         
@@ -22,8 +20,6 @@ class SourceCodeController extends Controller
 
     public function createSourceCode(Request $req)
     {
-        $this->authorize('create', SourceCode::class);
-
         $validator = Validator::make($req->all(), [
             "user_id" => "required|exists:users,id|numeric",
             "title" => "required|string|max:255",
@@ -34,10 +30,9 @@ class SourceCodeController extends Controller
             return response()->json($validator->errors(), 422);
         }
         
-        $code = new SourceCode();
-        
         $validated_data = $validator->validated();
-
+        
+        $code = new SourceCode();
         $code->fill($validated_data);
         $code->save();
         
@@ -46,16 +41,15 @@ class SourceCodeController extends Controller
             ], 201);
     }
 
-    public function updateSourceCode(Request $req)
+    public function updateSourceCode(Request $req, $id)
     {
-        $this->authorize('update', SourceCode::class);
-        
-        $id = $req['id'];
         $code = SourceCode::find($id);
         
         if (!$code) {
             return response()->json(['message' => 'Code not found'], 404);
         }
+
+        this->authorize('update', $code);
         
         $validator = Validator::make($req->all(), [
             "user_id" => "required|exists:users,id|numeric",
@@ -67,27 +61,21 @@ class SourceCodeController extends Controller
             return response()->json(['message' => $validator->errors()], 422);
         }
 
-        if ($req['user_id'] != $code->user_id) {
-            return response()->json(['message' => 'Unauthorized'], 401);
-        }
-    
         $validated_data = $validator->validated();
         $code->update($validated_data);
     
         return response()->json(['message' => 'Updated successfully'], 200);
     }
 
-    public function deleteSourceCode()
+    public function deleteSourceCode($id)
     {
-        $id = $req['id'];
-        
-        $this->authorize('delete', SourceCode::class);
-        
         $code = SourceCode::find($id);
         
         if (!$code) {
             return response()->json(['message' => 'Code not found'], 404);
         }
+        
+        this->authorize('delete', $code);
         
         $code->delete();
         

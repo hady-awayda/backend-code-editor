@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Providers;
+use App\Models\SourceCode;
+use App\Policies\SourceCodePolicy;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;

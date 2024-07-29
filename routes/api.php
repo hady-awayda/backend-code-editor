@@ -9,6 +9,15 @@ use App\Http\Controllers\SourceCodeController;
 use App\Http\Controllers\AuthController;
 
 Route::group([
+    "prefix" => "auth",
+    "controller" => AuthController::class
+], function () {
+    Route::post("/register", "register");
+    Route::post("/login", "login");
+});
+
+Route::group([
+    'middleware' => 'jwt.verify',
     "prefix" => "users",
     "controller" => UserController::class
 ], function () {
@@ -19,29 +28,21 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => 'jwt.auth',
+    'middleware' => 'jwt.verify',
     "prefix" => "source_codes",
     "controller" => SourceCodeController::class
 ], function () {
     Route::get('/{user_id}', 'getSourceCodesByUserId');
     Route::post('/', 'createSourceCode');
-    Route::put('/', 'updateSourceCode');
-    Route::delete('/', 'deleteSourceCode');
+    Route::put('/{id}', 'updateSourceCode');
+    Route::delete('/{id}', 'deleteSourceCode');
 });
 
 Route::group([
-    // 'middleware' => 'jwt.auth',
+    'middleware' => 'jwt.verify',
     "prefix" => "messages",
     "controller" => MessageController::class
 ], function () {
     Route::get("/{user_id_1}/{user_id_2}", "getMessagesBetweenUsers");
     Route::post("/", "addMessageToConversation");
-});
-
-Route::group([
-    "prefix" => "auth",
-    "controller" => AuthController::class
-], function () {
-    Route::post("/register", "register");
-    Route::post("/login", "login");
 });

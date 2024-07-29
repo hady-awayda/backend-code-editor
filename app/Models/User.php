@@ -5,8 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable 
+class User extends Authenticatable implements JWTSubject
 {
     use HasFactory;
 
@@ -15,7 +16,6 @@ class User extends Authenticatable
     public function conversations()
     {
         return $this->hasMany(Conversation::class, 'user_id_1')->orWhere('user_id_2', $this->id);
-
     }
 
     public function messages()
@@ -26,5 +26,18 @@ class User extends Authenticatable
     public function sourceCodes()
     {
         return $this->hasMany(SourceCode::class);
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+    
+    public function getJWTCustomClaims()
+    {
+        return [
+            "user_id" => $this->id,
+            "role" => $this->role
+        ];
     }
 }
