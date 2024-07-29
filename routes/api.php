@@ -28,7 +28,7 @@ Route::group([
 });
 
 Route::group([
-    // 'middleware' => 'jwt.auth',
+    'middleware' => 'jwt.auth',
     "prefix" => "source_codes",
     "controller" => SourceCodeController::class
 ], function () {

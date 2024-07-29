@@ -46,7 +46,8 @@ class AuthHelper
     {
         $jwt = $this->GetRawJWT();
         $token = $this->DecodeRawJWT($jwt);
-        $userID = $token->data->userID;
+        $userID = $token->userID;
+        echo $userID;
 
         $user = User::find($userID);
 

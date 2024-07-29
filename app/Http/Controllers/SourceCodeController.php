@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 class SourceCodeController extends Controller
 {
     public function getSourceCodesByUserId($userId) {
-        this->authorize('view', SourceCode::class);
+        // $this->authorize('view', SourceCode::class);
 
         $sourceCodes = SourceCode::where('user_id', $userId)->get();
         
