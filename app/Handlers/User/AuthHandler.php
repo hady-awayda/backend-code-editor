@@ -12,7 +12,7 @@ class AuthHandler
         $secretKey  = env('JWT_SECRET');
         $tokenId    = base64_encode(random_bytes(16));
         $issuedAt   = new DateTimeImmutable();
-        $expire     = $issuedAt->modify('+1 months')->getTimestamp();     
+        $expire     = $issuedAt->modify('+6 hours')->getTimestamp();     
         $serverName = "code-editor";
         $userID   	= $user->id;
 		$role     	= "user";
@@ -27,6 +27,10 @@ class AuthHandler
             'role' => $role,
         ];
 
-        return JWT::encode($data, $secretKey, 'HS256');
+        return JWT::encode(
+            $data,      
+            $secretKey, 
+            'HS256'     
+        );
     }
 }

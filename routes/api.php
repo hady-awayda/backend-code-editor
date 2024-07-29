@@ -9,12 +9,27 @@ use App\Http\Controllers\SourceCodeController;
 use App\Http\Controllers\AuthController;
 
 Route::group([
+    // "middleware" => "api",
     "prefix" => "auth",
     "controller" => AuthController::class
 ], function () {
     Route::post("/register", "register");
     Route::post("/login", "login");
 });
+
+// Route::group([
+
+//     'middleware' => 'api',
+//     'prefix' => 'auth'
+
+// ], function ($router) {
+
+//     Route::post('login', 'AuthController@login');
+//     Route::post('logout', 'AuthController@logout');
+//     Route::post('refresh', 'AuthController@refresh');
+//     Route::post('me', 'AuthController@me');
+
+// });
 
 Route::group([
     // 'middleware' => 'jwt.auth',
