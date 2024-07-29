@@ -12,6 +12,12 @@ class UserController extends Controller
     public function getAllUsers() {
         $users = User::all();
 
+        if (!$users) {
+            return response()->json([
+                'message' => 'No users found'
+            ], 404);
+        }
+        
         return response()->json([
             'data' => $users
         ], 200);
@@ -20,33 +26,15 @@ class UserController extends Controller
     public function getUserById($user_id) {
         $user = User::find($user_id);
 
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not found'
+            ], 404);
+        } 
+
         return response()->json([
             'data' => $user
         ], 200);
-    }
-
-    public function createUser(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->save();
-
-        return response()->json([
-            "message" => 'Created Successfully'
-        ], 201);
     }
 
     public function updateUser(Request $request, $user_id) {
@@ -58,29 +46,27 @@ class UserController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'errors' => $validator->errors()
-            ], 422);
+                'message' => 'Updated Successfully'
+            ], 204);
         }
         
-        $user = User::find($user_id);
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->save();
-        
         return response()->json([
-            "message" => 'Updated Successfully'
-        ]);
+            "errors" => $response
+        ], 422);
     }
 
-    public function deleteUser($id)
+    public function deleteUser(Request $request, $id)
     {
-        $user = User::find($id);
+        $response = UserService::deleteUser($request, $id);
 
-        $user->delete();
+        if ($response === "success") {
+            return response()->json([
+                "message" => 'Deleted Successfully'
+            ], 204);
+        }
         
         return response()->json([
-            "message" => 'Deleted Successfully'
-        ]);
+            "message" => $response
+        ], 404);
     }
 }
