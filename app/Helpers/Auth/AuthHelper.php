@@ -21,6 +21,7 @@ class AuthHelper
         }
 
         $jwt = $matches[1];
+
         if (!$jwt) {
             throw new Exception('Could not extract token', 401);
         }
@@ -34,8 +35,8 @@ class AuthHelper
         
         try {
             $token = JWT::decode($jwt, new Key($secretKey, 'HS512'));
-            $now = new DateTimeImmutable();
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             throw new Exception('Unauthorized', 401);
         }
 
@@ -47,7 +48,6 @@ class AuthHelper
         $jwt = $this->GetRawJWT();
         $token = $this->DecodeRawJWT($jwt);
         $userID = $token->userID;
-        echo $userID;
 
         $user = User::find($userID);
 

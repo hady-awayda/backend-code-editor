@@ -30,7 +30,7 @@ class AuthHandler
         return JWT::encode(
             $data,      
             $secretKey, 
-            'HS256'     
+            'HS512'     
         );
     }
 }
