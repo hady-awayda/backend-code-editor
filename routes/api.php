@@ -8,12 +8,6 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\SourceCodeController;
 use App\Http\Controllers\AuthController;
 
-Route::middleware('jwt.auth')->get('/user', function (Request $request) {
-    $adminHelper = new AdminHelper();
-    $user = $adminHelper->GetAuthUser();
-    return response()->json(['data' => $user], 200);
-});
-
 Route::group([
     "prefix" => "users",
     "controller" => UserController::class
@@ -36,7 +30,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => 'auth.jwt',
+    // 'middleware' => 'auth.jwt',
     "prefix" => "messages",
     "controller" => MessageController::class
 ], function () {

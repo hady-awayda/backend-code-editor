@@ -59,7 +59,7 @@ class SourceCodeController extends Controller
         ]);
     
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return response()->json(['message' => $validator->errors()], 422);
         }
 
         if ($req['user_id'] != $code->user_id) {
@@ -77,7 +77,7 @@ class SourceCodeController extends Controller
         $code = SourceCode::find($id);
         
         if (!$code) {
-            return response()->json(['error' => 'Code not found'], 404);
+            return response()->json(['message' => 'Code not found'], 404);
         }
         
         $code->delete();

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Handlers\Admin;
+namespace App\Handlers\User;
 
 use Firebase\JWT\JWT;
 use DateTimeImmutable;
@@ -16,7 +16,7 @@ class AuthHandler
         $secretKey  = env('JWT_SECRET');
         $tokenId    = base64_encode(random_bytes(16));
         $issuedAt   = new DateTimeImmutable();
-        $expire     = $issuedAt->modify('+6 months')->getTimestamp();     
+        $expire     = $issuedAt->modify('+1 months')->getTimestamp();     
         $serverName = "code-editor";
         $userID   	= $user->id;                                    
 		$role     	= "user";

@@ -2,30 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use App\Handlers\Admin\AuthHandler;
+use App\Handlers\User\AuthHandler;
 use App\Models\User;
 use Firebase\JWT\JWT;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\APIController;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 
-class AuthController extends APIController
+class AuthController extends Controller
 {
     public function register(Request $request)
     {
         $input = $request->only('name', 'email', 'password');
 
         $validator = Validator::make($input, [
-            'name' => 'required',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error', $validator->errors(), 422);
+            return response()->json([
+                "message" => $validator->errors()
+            ], 422);
         }
 
         $input['password'] = Hash::make($input['password']);
@@ -35,14 +36,12 @@ class AuthController extends APIController
             $authHandler = new AuthHandler;
             $token = $authHandler->GenerateToken($user);
 
-            $success = [
-                'user' => $user,
-                'token' => $token,
-            ];
-    
-            return $this->sendResponse($success, 'user registered successfully', 201);
+            return response()->json([
+                "data" => [
+                    "token" => $token,
+                ]
+            ], 201);
         }
-        
     }
 
     public function login(Request $request)
@@ -50,12 +49,14 @@ class AuthController extends APIController
         $input = $request->only('email', 'password');
 
         $validator = Validator::make($input, [
-            'email' => 'required',
-            'password' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8',
         ]);
 
         if($validator->fails()){
-            return $this->sendError('Validation Error', $validator->errors(), 422);
+            return response()->json([
+                "message" => $validator->errors()
+            ], 422);
         }
 
         $remember = $request->remember;
@@ -66,12 +67,16 @@ class AuthController extends APIController
             $authHandler = new AuthHandler;
             $token = $authHandler->GenerateToken($user);
 
-            $success = ['user' => $user, 'token' => $token];
-
-            return $this->sendResponse($success, 'Logged In');
+            return response()->json([
+                "data" => [
+                    "token" => $token,
+                ]
+            ], 201);
         }
         else{
-            return $this->sendError('Unauthorized', ['error' => "Invalid Login credentials"], 401);
+            return response()->json([
+                'message' => "Invalid login credentials"
+            ], 401);
         }
     }
 }
