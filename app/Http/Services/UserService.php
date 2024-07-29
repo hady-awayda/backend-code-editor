@@ -8,28 +8,6 @@ use App\Models\User;
 
 class UserService
 {
-	public static function createUser($request){
-		$validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-        ]);
-
-        if ($validator->fails()) {
-            return $validator->errors();
-        }
-
-        $user = new User();
-
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-
-        $user->save();
-
-		return "success";
-	}
-	
     // expand to updateUsername, updateEmail, updatePassword
 	public static function updateUser($request, $user_id)
 	{

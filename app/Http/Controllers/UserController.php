@@ -38,20 +38,6 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function createUser(Request $request) {
-        $response = UserService::createUser($request);
-
-        if ($response == "success") {
-            return response()->json([
-                'message' => 'Created Successfully'
-            ], 201);
-        }
-        
-        return response()->json([
-            "errors" => $response
-        ], 422);
-    }
-
     public function updateUser(Request $request, $user_id) {
         $response = UserService::updateUser($request, $user_id);
         
