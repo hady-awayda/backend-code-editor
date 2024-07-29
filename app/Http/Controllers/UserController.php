@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use App\Services\UserService;
 
 class UserController extends Controller
 {
@@ -38,12 +39,8 @@ class UserController extends Controller
     }
 
     public function updateUser(Request $request, $user_id) {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:8',
-        ]);
-
+        $response = UserService::updateUser($request, $user_id);
+        
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Updated Successfully'
@@ -55,8 +52,7 @@ class UserController extends Controller
         ], 422);
     }
 
-    public function deleteUser(Request $request, $id)
-    {
+    public function deleteUser(Request $request, $id) {
         $response = UserService::deleteUser($request, $id);
 
         if ($response === "success") {
