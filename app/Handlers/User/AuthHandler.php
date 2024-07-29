@@ -7,10 +7,6 @@ use DateTimeImmutable;
 
 class AuthHandler
 {
-    /**
-     * Handles operations related to user authentication
-     */
-
     public function GenerateToken($user)
     {
         $secretKey  = env('JWT_SECRET');
@@ -18,26 +14,19 @@ class AuthHandler
         $issuedAt   = new DateTimeImmutable();
         $expire     = $issuedAt->modify('+1 months')->getTimestamp();     
         $serverName = "code-editor";
-        $userID   	= $user->id;                                    
+        $userID   	= $user->id;
 		$role     	= "user";
 
         $data = [
-            'iat'  => $issuedAt->getTimestamp(),    
-            'jti'  => $tokenId,                     
-            'iss'  => $serverName,                  
-            'nbf'  => $issuedAt->getTimestamp(),    
-            'exp'  => $expire,                      
-            'data' => [                             
-                'userID' => $userID,   
-                'role' => $role,         
-            ]
+            'iat'  => $issuedAt->getTimestamp(),
+            'jti'  => $tokenId,
+            'iss'  => $serverName,
+            'nbf'  => $issuedAt->getTimestamp(),
+            'exp'  => $expire,
+            'userID' => $userID,
+            'role' => $role,
         ];
 
-        $token = JWT::encode(
-            $data,      
-            $secretKey, 
-            'HS512'     
-        );
-        return $token;
+        return JWT::encode($data, $secretKey, 'HS256');
     }
 }

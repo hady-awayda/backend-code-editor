@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Handlers\User\AuthHandler;
 use App\Models\User;
-use Firebase\JWT\JWT;
-use DateTimeImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -59,24 +57,23 @@ class AuthController extends Controller
             ], 422);
         }
 
-        $remember = $request->remember;
-
-        if(Auth::attempt($input, $remember)){
+        if(Auth::attempt($input)){
             $user = Auth::user();
 
-            $authHandler = new AuthHandler;
-            $token = $authHandler->GenerateToken($user);
+            if ($user) {
+                $authHandler = new AuthHandler;
+                $token = $authHandler->GenerateToken($user);
 
-            return response()->json([
-                "data" => [
-                    "token" => $token,
-                ]
-            ], 201);
+                return response()->json([
+                    "data" => [
+                        "token" => $token,
+                    ]
+                ], 200);
+            }
         }
-        else{
-            return response()->json([
-                'message' => "Invalid login credentials"
-            ], 401);
-        }
+        
+        return response()->json([
+            'message' => "Invalid login credentials"
+        ], 401);
     }
 }

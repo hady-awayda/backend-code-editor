@@ -17,7 +17,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => 'jwt.verify',
+    // 'middleware' => 'jwt.auth',
     "prefix" => "users",
     "controller" => UserController::class
 ], function () {
@@ -28,7 +28,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => 'jwt.verify',
+    // 'middleware' => 'jwt.auth',
     "prefix" => "source_codes",
     "controller" => SourceCodeController::class
 ], function () {
@@ -39,7 +39,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => 'jwt.verify',
+    // 'middleware' => 'jwt.auth',
     "prefix" => "messages",
     "controller" => MessageController::class
 ], function () {
