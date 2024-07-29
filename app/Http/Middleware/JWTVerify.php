@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Helpers\PublicHelper;
+use App\Helpers\Auth\AuthHelper;
 use Closure;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -23,10 +23,12 @@ class JWTVerify
      */
     public function handle(Request $request, Closure $next) : Response
     {
-        $publicHelper = new PublicHelper();
+        $publicHelper = new AuthHelper();
 
         try {
-            $token = $publicHelper->GetAndDecodeJWT();
+            $user = $publicHelper->GetAuthUser();
+
+            $request->merge(['user_id' => $user->id]);
         } catch (Exception $e) {
             return response()->json(['error' => $e->getMessage()], 401);
         }

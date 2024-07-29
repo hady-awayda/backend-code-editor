@@ -19,18 +19,18 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => 'auth.jwt',
+    'middleware' => 'jwt.auth',
     "prefix" => "source_codes",
     "controller" => SourceCodeController::class
 ], function () {
     Route::get('/{user_id}', 'getSourceCodesByUserId');
     Route::post('/', 'createSourceCode');
-    Route::put('/{id}', 'updateSourceCode');
-    Route::delete('/{id}', 'deleteSourceCode');
+    Route::put('/', 'updateSourceCode');
+    Route::delete('/', 'deleteSourceCode');
 });
 
 Route::group([
-    // 'middleware' => 'auth.jwt',
+    // 'middleware' => 'jwt.auth',
     "prefix" => "messages",
     "controller" => MessageController::class
 ], function () {

@@ -22,6 +22,8 @@ class SourceCodeController extends Controller
 
     public function createSourceCode(Request $req)
     {
+        $this->authorize('create', SourceCode::class);
+
         $validator = Validator::make($req->all(), [
             "user_id" => "required|exists:users,id|numeric",
             "title" => "required|string|max:255",
@@ -44,8 +46,11 @@ class SourceCodeController extends Controller
             ], 201);
     }
 
-    public function updateSourceCode(Request $req, $id)
+    public function updateSourceCode(Request $req)
     {
+        $this->authorize('update', SourceCode::class);
+        
+        $id = $req['id'];
         $code = SourceCode::find($id);
         
         if (!$code) {
@@ -72,8 +77,12 @@ class SourceCodeController extends Controller
         return response()->json(['message' => 'Updated successfully'], 200);
     }
 
-    public function deleteSourceCode($id)
+    public function deleteSourceCode()
     {
+        $id = $req['id'];
+        
+        $this->authorize('delete', SourceCode::class);
+        
         $code = SourceCode::find($id);
         
         if (!$code) {
