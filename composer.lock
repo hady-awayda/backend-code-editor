@@ -6654,6 +6654,7 @@
                 "laravel/framework": "^10.28.0",
                 "laravel/pint": "^1.13.3",
                 "laravel/sail": "^1.25.0",
+                "laravel/sanctum": "^3.3.1",
                 "laravel/tinker": "^2.8.2",
                 "nunomaduro/larastan": "^2.6.4",
                 "orchestra/testbench-core": "^8.13.0",
