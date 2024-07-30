@@ -11,6 +11,11 @@ use App\Services\UserService;
 class UserController extends Controller
 {
     public function getAllUsers() {
+        echo "Hello";
+        return response()->json([
+            'message' => 'No users found'
+        ]);
+        
         $users = User::all();
 
         if (!$users) {
