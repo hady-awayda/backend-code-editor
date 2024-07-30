@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Helpers\Validators\UserValidator;
 
 class UserService
 {
@@ -17,11 +18,7 @@ class UserService
             return "User not found";
         }
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user_id,
-            'password' => 'required|string|min:8',
-        ]);
+        $validator = UserValidator::validate($request);
 		
         if ($validator->fails()) {
             return $validator->errors();
@@ -47,12 +44,8 @@ class UserService
             return "User not found";
         }
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user_id,
-            'password' => 'required|string|min:8',
-        ]);
-		
+        $validator = UserValidator::validate($request);
+
         if ($validator->fails()) {
             return $validator->errors();
         }

@@ -13,28 +13,15 @@ Route::group([
 ], function () {
     Route::post("/register", "register");
     Route::post("/login", "login");
+    Route::post("/logout", "logout");
+    Route::post("/refresh", "refresh");
 });
-
-// Route::group([
-
-//     'middleware' => 'api',
-//     'prefix' => 'auth'
-
-// ], function ($router) {
-
-//     Route::post('login', 'AuthController@login');
-//     Route::post('logout', 'AuthController@logout');
-//     Route::post('refresh', 'AuthController@refresh');
-//     Route::post('me', 'AuthController@me');
-
-// });
 
 Route::group([
     // 'middleware' => 'jwt.auth',
     "prefix" => "users",
     "controller" => UserController::class
 ], function () {
-    Route::get("/", "getAllUsers");
     Route::get("/{id}", "getUserById");
     Route::put("/{id}", "updateUser");
     Route::delete("/{id}", "deleteUser");
@@ -58,4 +45,30 @@ Route::group([
 ], function () {
     Route::get("/{user_id_1}/{user_id_2}", "getMessagesBetweenUsers");
     Route::post("/", "addMessageToConversation");
+});
+
+Route::group([
+    // 'middleware' => 'jwt.auth',
+    "prefix" => "conversations",
+    "controller" => ConversationController::class
+], function () {
+    Route::get("/{user_id}", "getConversationsBetweenUsers");
+});
+
+Route::group([
+    // 'middleware' => 'jwt.auth',
+    "prefix" => "search",
+    "controller" => SearchController::class
+], function () {
+    Route::get("/users/{username}", "searchUsers");
+});
+
+Route::group([
+    // 'middleware' => 'jwt.auth',
+    "middleware" => "admin",
+    "prefix" => "admin",
+    "controller" => AdminController::class
+], function () {
+    Route::get("/", "getAllUsers");
+    Route::post("/import", "importUsers");
 });
