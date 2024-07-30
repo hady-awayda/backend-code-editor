@@ -14,7 +14,7 @@ class SourceCodeController extends Controller
     }
 
     public function getSourceCodesByUserId($userId) {
-        // $this->authorize('viewAny', auth()->user());
+        // $this->authorize('viewAny', SourceCode::class);
 
         $sourceCodes = SourceCode::where('user_id', $userId)->get();
         
