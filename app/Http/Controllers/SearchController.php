@@ -9,9 +9,11 @@ class SearchController extends Controller
 {
     public function search($username)
     {
-        $users = User::where('username', 'like', '%' . $username . '%')->get();
+        $users = User::where('name', 'like', '%' . $username . '%')
+        ->select('id', 'name')
+        ->get();
 
-        if (!$users) {
+        if ($users->isEmpty()) {
             return response()->json([
                 'message' => 'No users found'
             ], 404);

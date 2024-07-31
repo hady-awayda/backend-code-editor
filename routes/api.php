@@ -63,7 +63,7 @@ Route::group([
     "prefix" => "search",
     "controller" => SearchController::class
 ], function () {
-    Route::get("/users/{username}", "searchUsers");
+    Route::get("/{username}", "search");
 });
 
 Route::group([
