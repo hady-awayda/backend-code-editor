@@ -54,11 +54,10 @@ class SourceCodeController extends Controller
             return response()->json(['message' => 'Code not found'], 404);
         }
 
-        this->authorize('update', $code);
+        // this->authorize('update', $code);
         
         $validator = Validator::make($req->all(), [
             "user_id" => "required|exists:users,id|numeric",
-            "title" => "required|string|max:255",
             "code" => "required|string|min:0",
         ]);
     
@@ -80,7 +79,7 @@ class SourceCodeController extends Controller
             return response()->json(['message' => 'Code not found'], 404);
         }
         
-        this->authorize('delete', $code);
+        // this->authorize('delete', $code);
         
         $code->delete();
         
