@@ -67,7 +67,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => ['jwt.auth', 'admin'],
+    // 'middleware' => ['jwt.auth', 'admin'],
     "prefix" => "admin",
     "controller" => AdminController::class
 ], function () {
