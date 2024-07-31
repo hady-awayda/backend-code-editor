@@ -55,7 +55,7 @@ Route::group([
     "prefix" => "conversations",
     "controller" => ConversationController::class
 ], function () {
-    Route::get("/{user_id}", "getConversationsBetweenUsers");
+    Route::get("/{user_id}", "getUserConversations");
 });
 
 Route::group([
