@@ -95,7 +95,6 @@
 ```json
 {
     "user_id": "int (required, exists:users,id)",
-    "title": "string (required, max: 255)",
     "code": "string (required)"
 }
 ```

@@ -39,7 +39,7 @@ class UserController extends Controller
         } 
 
         return response()->json([
-            'data' => $user
+            'data' => $user->only('id', 'name', 'email', 'created_at')
         ], 200);
     }
 

@@ -36,26 +36,37 @@ class MessageService
             'message' => 'required|string'
         ]);
 
-		if ($validator->fails()) {
-			return $validator->errors();
-		}
+        if ($validator->fails()) {
+            return $validator->errors();
+        }
 
-		$validated_data = $validator->validated();
-		
-		$senderId = $validated_data['sender_id'];
-        $receiverId = $validated_data['receiver_id'];
+        $data = $validator->validated();
 
-        $conversation = Conversation::firstOrCreate([
-            'user_id_1' => min($senderId, $receiverId),
-            'user_id_2' => max($senderId, $receiverId),
+        $senderId = $data['sender_id'];
+        $receiverId = $data['receiver_id'];
+        $messageContent = $data['message'];
+
+        $conversation = Conversation::where(function($query) use ($senderId, $receiverId) {
+            $query->where('user_id_1', $senderId)
+                  ->where('user_id_2', $receiverId);
+        })->orWhere(function($query) use ($senderId, $receiverId) {
+            $query->where('user_id_1', $receiverId)
+                  ->where('user_id_2', $senderId);
+        })->first();
+
+        if (!$conversation) {
+            $conversation = Conversation::create([
+                'user_id_1' => $senderId,
+                'user_id_2' => $receiverId,
+            ]);
+        }
+
+        $message = Message::create([
+            'conversation_id' => $conversation->id,
+            'sender_id' => $senderId,
+            'message' => $messageContent,
         ]);
 
-		$message = new Message();
-        $message->conversation_id = $conversation->id;
-        $message->sender_id = $senderId;
-        $message->message = $validated_data['message'];
-        $message->save();
-
-		return "success"; 
+        return "success";
 	}
 }

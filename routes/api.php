@@ -3,11 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\SourceCodeController;
+use App\Http\Controllers\ConversationController;
 
 Route::group([
-    // "middleware" => "api",
+    "middleware" => "api",
     "prefix" => "auth",
     "controller" => AuthController::class
 ], function () {
@@ -18,7 +21,7 @@ Route::group([
 });
 
 Route::group([
-    // 'middleware' => 'jwt.auth',
+    'middleware' => 'jwt.auth',
     "prefix" => "users",
     "controller" => UserController::class
 ], function () {
@@ -39,7 +42,7 @@ Route::group([
 });
 
 Route::group([
-    // 'middleware' => 'jwt.auth',
+    'middleware' => 'jwt.auth',
     "prefix" => "messages",
     "controller" => MessageController::class
 ], function () {
@@ -48,24 +51,23 @@ Route::group([
 });
 
 Route::group([
-    // 'middleware' => 'jwt.auth',
+    'middleware' => 'jwt.auth',
     "prefix" => "conversations",
     "controller" => ConversationController::class
 ], function () {
-    Route::get("/{user_id}", "getConversationsBetweenUsers");
+    Route::get("/{user_id}", "getUserConversations");
 });
 
 Route::group([
-    // 'middleware' => 'jwt.auth',
+    'middleware' => 'jwt.auth',
     "prefix" => "search",
     "controller" => SearchController::class
 ], function () {
-    Route::get("/users/{username}", "searchUsers");
+    Route::get("/{username}", "search");
 });
 
 Route::group([
-    // 'middleware' => 'jwt.auth',
-    "middleware" => "admin",
+    'middleware' => ['jwt.auth', 'admin'],
     "prefix" => "admin",
     "controller" => AdminController::class
 ], function () {

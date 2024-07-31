@@ -4,14 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 
 class SearchController extends Controller
 {
     public function search($username)
     {
-        $users = User::where('username', 'like', '%' . $username . '%')->get();
+        $validator = Validator::make(['username' => $username], [
+            'username' => 'required|string|max:255'
+        ]);
 
-        if (!$users) {
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $name = $validator->validated()['username'];
+        
+        $users = User::where('name', 'like', '%' . $name . '%')
+        ->select('id', 'name')
+        ->get();
+
+        if ($users->isEmpty()) {
             return response()->json([
                 'message' => 'No users found'
             ], 404);
