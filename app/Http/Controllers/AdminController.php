@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Services\ImportService;
+use League\Csv\Reader;
+use League\Csv\Statement;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Services\ImportService;
 
 class AdminController extends Controller
 {
@@ -24,19 +27,31 @@ class AdminController extends Controller
 
     public function importUsers(Request $request)
     {
-        // $validator = Validator::make($request->all(), [
-        //     'file' => 'required|file|mimes:csv,txt|max:10240',
-        // ]);
+        if (!$request->hasFile('file')) {
+            return response()->json([
+                'message' => 'No file was uploaded'
+            ], 400);
+        }
 
-        // if ($validator->fails()) {
-        //     return response()->json([
-        //         'message' => 'Validation failed',
-        //         'errors' => $validator->errors()
-        //     ], 422);
-        // }
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file|mimes:csv,txt|max:10240',
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+    
         $file = $request->file('file');
-
+    
+        if (!$file->isValid()) {
+            return response()->json([
+                'message' => 'Uploaded file is not valid'
+            ], 400);
+        }
+    
         try {
             $csv = Reader::createFromPath($file->getRealPath(), 'r');
             $csv->setHeaderOffset(0);
@@ -49,19 +64,14 @@ class AdminController extends Controller
 
             $importedCount = 0;
             foreach ($records as $record) {
-                // $recordValidator = Validator::make($record, [
-                //     'id' => 'required',
-                //     'name' => 'required|string|max:255',
-                //     'email' => 'required|email|max:255',
-                //     'created_at' => 'required',
-                //     'updated_at' => 'required',
-                // ]);
+                $error = ImportService::insertUser($record);
 
-                if ($recordValidator->fails()) {
-                    continue;
+                if ($error) {
+                    return response()->json([
+                        'error' => $error
+                    ], 500);
                 }
 
-                ImportService::insertUser($record);
                 $importedCount++;
             }
 

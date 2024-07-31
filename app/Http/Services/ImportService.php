@@ -7,8 +7,8 @@ use App\Helpers\Validators\UserValidator;
 
 class ImportService
 {
-	public static function insertUser() {
-		$validator = UserValidator::validate($request);
+	public static function insertUser($record) {
+		$validator = UserValidator::validate($record);
 		
         if ($validator->fails()) {
             return $validator->errors();
