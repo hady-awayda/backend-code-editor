@@ -22,30 +22,59 @@ class AdminController extends Controller
         ], 200);
     }
 
-    // prototype
-    public function importUsers(Request $request) {
+    public function importUsers(Request $request)
+    {
+        // $validator = Validator::make($request->all(), [
+        //     'file' => 'required|file|mimes:csv,txt|max:10240',
+        // ]);
+
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'message' => 'Validation failed',
+        //         'errors' => $validator->errors()
+        //     ], 422);
+        // }
+
         $file = $request->file('file');
 
-        if (!$file) {
+        try {
+            $csv = Reader::createFromPath($file->getRealPath(), 'r');
+            $csv->setHeaderOffset(0);
+
+            $stmt = Statement::create()
+                ->offset(0)
+                ->limit(1000);
+
+            $records = $stmt->process($csv);
+
+            $importedCount = 0;
+            foreach ($records as $record) {
+                // $recordValidator = Validator::make($record, [
+                //     'id' => 'required',
+                //     'name' => 'required|string|max:255',
+                //     'email' => 'required|email|max:255',
+                //     'created_at' => 'required',
+                //     'updated_at' => 'required',
+                // ]);
+
+                if ($recordValidator->fails()) {
+                    continue;
+                }
+
+                ImportService::insertUser($record);
+                $importedCount++;
+            }
+
             return response()->json([
-                'message' => 'No file found'
-            ], 404);
-        }
+                'message' => 'Users imported successfully',
+                'imported_count' => $importedCount
+            ], 200);
 
-        $lines = file($file->getRealPath());
-
-        if (!$lines) {
+        } catch (\Exception $e) {
             return response()->json([
-                'message' => 'No lines found'
-            ], 404);
+                'message' => 'An error occurred while importing users',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        for ($i = 0; $i < count($lines); $i++) {
-            ImportService::insertUser($lines[$i]);
-        }
-        
-        return response()->json([
-            'message' => 'Users imported successfully'
-        ], 200);
     }
 }
