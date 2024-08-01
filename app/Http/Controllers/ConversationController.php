@@ -9,9 +9,9 @@ class ConversationController extends Controller
 {
     public function getUserConversations($userId)
     {
-        if (auth()->user()->id != $userId) {
-            return response()->json(['error' => 'Unauthorized'], 403);
-        }
+        // if (auth()->user()->id != $userId) {
+        //     return response()->json(['error' => 'Unauthorized'], 403);
+        // }
         
         $conversations = Conversation::where('user_id_1', $userId)
         ->orWhere('user_id_2', $userId)

@@ -10,7 +10,7 @@ use App\Http\Controllers\SourceCodeController;
 use App\Http\Controllers\ConversationController;
 
 Route::group([
-    "middleware" => "api",
+    // "middleware" => "api",
     "prefix" => "auth",
     "controller" => AuthController::class
 ], function () {
@@ -21,7 +21,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => 'jwt.auth',
+    // 'middleware' => 'jwt.auth',
     "prefix" => "users",
     "controller" => UserController::class
 ], function () {
@@ -31,7 +31,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => 'jwt.auth',
+    // 'middleware' => 'jwt.auth',
     "prefix" => "source_codes",
     "controller" => SourceCodeController::class
 ], function () {
@@ -42,7 +42,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => 'jwt.auth',
+    // 'middleware' => 'jwt.auth',
     "prefix" => "messages",
     "controller" => MessageController::class
 ], function () {
@@ -51,7 +51,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => 'jwt.auth',
+    // 'middleware' => 'jwt.auth',
     "prefix" => "conversations",
     "controller" => ConversationController::class
 ], function () {
@@ -59,7 +59,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => 'jwt.auth',
+    // 'middleware' => 'jwt.auth',
     "prefix" => "search",
     "controller" => SearchController::class
 ], function () {
@@ -67,7 +67,7 @@ Route::group([
 });
 
 Route::group([
-    'middleware' => ['jwt.auth', 'admin'],
+    // 'middleware' => ['jwt.auth', 'admin'],
     "prefix" => "admin",
     "controller" => AdminController::class
 ], function () {

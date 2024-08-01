@@ -8,15 +8,15 @@ use Illuminate\Support\Facades\Validator;
 
 class SourceCodeController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth:api');
+    // }
 
     public function getSourceCodesByUserId($userId) {
-        if (auth()->user()->id != $userId) {
-            return response()->json(['error' => 'Unauthorized'], 403);
-        }
+        // if (auth()->user()->id != $userId) {
+        //     return response()->json(['error' => 'Unauthorized'], 403);
+        // }
         
         // $this->authorize('viewAny', SourceCode::class);
 
