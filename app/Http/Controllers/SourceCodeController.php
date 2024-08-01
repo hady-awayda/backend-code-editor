@@ -14,6 +14,9 @@ class SourceCodeController extends Controller
     }
 
     public function getSourceCodesByUserId($userId) {
+        if (auth()->user()->id != $userId) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
         // $this->authorize('viewAny', SourceCode::class);
 
         $sourceCodes = SourceCode::where('user_id', $userId)->get();
