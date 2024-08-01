@@ -11,9 +11,9 @@ class MessageService
 {
 	public static function getConversation($userId1, $userId2)
 	{
-        // if (auth()->user()->id != $userId1 || auth()->user()->id != $userId2) {
-        //     return response()->json(['error' => 'Unauthorized'], 403);
-        // }
+        if (auth()->user()->id != $userId1 && auth()->user()->id != $userId2) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
         
 		$conversation = Conversation::where(function ($query) use ($userId1, $userId2) {
             $query->where('user_id_1', $userId1)
